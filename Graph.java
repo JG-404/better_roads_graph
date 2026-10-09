@@ -7,15 +7,46 @@ public class Graph<V,A>{
         if(vet.length == 0)throw new Exception("Vertices não pode ser vazio");
 
         this.vertices = vet;
-        this.arestas = (A[][])new Object[vet.length][vet.length];
+        this.arestas = (A[][]) new Object[vet.length][vet.length];
     }
 
-    public void adicioneVertice() throws Exception{
+    private void redimensionar(int size){
+        V[] novoVet = (V[]) new Object[this.vertices.length + size];
 
+        for (int i = 0, j = 0; i < this.vertices.length; i++, j=this.vertices[i]==null?j+0:j+1){
+            if (this.vertices[i] == null) continue;
+            novoVet[j] = this.vertices[i];
+        }
+
+        this.vertices = novoVet;
+
+        A[][] novoAre = (A[][]) new Object[this.vertices.length][this.vertices.length];
+
+        for (int i = 0; i < this.arestas.length; i++){
+            for (int j = 0; j < this.arestas[i].length; j++){
+                novoAre[i][j] = this.arestas[i][j];
+            }
+        }
+
+        this.arestas = novoAre;
     }
 
-    public void removerVertice() throws Exception{
+    public void adicioneVertice(V i) throws Exception{
+        if (i == null) throw new Exception("Vertice vazio");
 
+        redimensionar(+1);
+
+        this.vertices[this.vertices.length-1] = i;
+    }
+
+    public void removerVertice(V i) throws Exception{
+        if (i == null) throw new Exception("Vertice vazio");
+
+        for (int j = 0; j < this.vertices.length; j++){
+            if (this.vertices[j].equals(i)) this.vertices[j] = null;
+        }
+
+        redimensionar(-1);
     }
 
     public void adicioneAresta(int i, int j, A aresta) throws Exception {
@@ -33,7 +64,25 @@ public class Graph<V,A>{
         this.arestas[j][i] = null;
     }
 
-    public void obterVizinhos() throws Exception{
+    public Object[] obterVizinhos(V i) throws Exception{
+        if (i == null) throw new Exception("Vertice nulo");
         
+        int numVet = -1;
+
+        for (int j = 0; j < this.vertices.length; j++){
+            if (this.vertices[j].equals(i)) numVet = j;
+        }
+
+        if (numVet < 0) throw new Exception("Vertice não encontrado");
+
+        Object[][] vizinhos = new Object[this.arestas[numVet].length][];
+
+        for (int j = 0; j < this.arestas[numVet].length; j++){
+            if (this.arestas[numVet][j] == null) continue;
+
+            vizinhos[j] = new Object[] {this.vertices[j], this.arestas[numVet][j]};
+        }
+
+        return vizinhos;
     }
 }

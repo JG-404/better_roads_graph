@@ -31,6 +31,10 @@ public class Graph<V,A>{
         this.arestas = novoAre;
     }
 
+    public V[] getVertices() {
+        return vertices;
+    }
+
     public void adicioneVertice(V i) throws Exception{
         if (i == null) throw new Exception("Vertice vazio");
 
@@ -47,6 +51,10 @@ public class Graph<V,A>{
         }
 
         redimensionar(-1);
+    }
+
+    public A[][] getArestas() {
+        return arestas;
     }
 
     public void adicioneAresta(int i, int j, A aresta) throws Exception {

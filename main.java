@@ -15,29 +15,29 @@ public class main {
             System.out.println("5 - Dallas");
             System.out.println("6 - Atlanta");
 
-            int escolha = scanner.nextInt();
+            String escolha = scanner.next();
             switch (escolha) {
-                case 1:
+                case "1":
                     cidadeInicial = "Miami";
                     digitou = true;
                     break;
-                case 2:
+                case "2":
                     cidadeInicial = "Los Angeles";
                     digitou = true;
                     break;
-                case 3:
+                case "3":
                     cidadeInicial = "Chicago";
                     digitou = true;
                     break;
-                case 4:
+                case "4":
                     cidadeInicial = "New York";
                     digitou = true;
                     break;
-                case 5:
+                case "5":
                     cidadeInicial = "Dallas";
                     digitou = true;
                     break;
-                case 6:
+                case "6":
                     cidadeInicial = "Atlanta";
                     digitou = true;
                     break;
@@ -175,6 +175,7 @@ public class main {
             usGraph.adicioneAresta(39, 40, 3);   // Fort Lauderdale - Miami
 
             imprimirTodasRotas1N(usGraph, cidadeInicial, cidades);
+            System.out.println(calcularMelhorRotaEntreDoisPontos(usGraph, cidadeInicial, "Orlando"));
 
         }catch(Exception e){
             System.err.println("Erro ao inicializar o grafo: " + e.getMessage());
@@ -182,6 +183,105 @@ public class main {
         }
          
     }
+
+    private static List<Object> calcularMelhorRotaEntreDoisPontos(Graph<String, Integer> grafo, String cidadeInicial, String cidadeDestino) throws Exception {
+        int indexInicial = -1;
+        int indexDestino = -1;
+        int numVertices = grafo.getVertices().length;
+
+        // 1. Localiza os índices de início e fim no grafo
+        for (int i = 0; i < numVertices; i++) {
+            if (grafo.getVertices()[i].equals(cidadeInicial)) {
+                indexInicial = i;
+            }
+            if (grafo.getVertices()[i].equals(cidadeDestino)) {
+                indexDestino = i;
+            }
+        }
+
+        if (indexInicial == -1) {
+            throw new Exception("Cidade inicial não encontrada no grafo.");
+        }
+        if (indexDestino == -1) {
+            throw new Exception("Cidade de destino não encontrada no grafo.");
+        }
+
+        int[] distancias = new int[numVertices];
+        int[] predecessores = new int[numVertices];
+        boolean[] visitados = new boolean[numVertices];
+
+        Arrays.fill(distancias, Integer.MAX_VALUE);
+        Arrays.fill(predecessores, -1); 
+        distancias[indexInicial] = 0;
+
+        while (true) {
+            int indexAtual = -1;
+            int distanciaAtual = Integer.MAX_VALUE;
+
+            for (int i = 0; i < numVertices; i++) {
+                if (!visitados[i] && distancias[i] < distanciaAtual) {
+                    distanciaAtual = distancias[i];
+                    indexAtual = i;
+                }
+            }
+
+            
+            if (indexAtual == -1 || indexAtual == indexDestino) {
+                break;
+            }
+
+            visitados[indexAtual] = true;
+            String cidadeAtualNome = (String) grafo.getVertices()[indexAtual];
+
+            for (Object c : grafo.obterVizinhos(cidadeAtualNome)) {
+                Object[] dadosVizinho = (Object[]) c; 
+                if (dadosVizinho == null) continue; 
+
+                String cidadeVizinha = (String) dadosVizinho[0]; 
+                Integer pesoAresta = (Integer) dadosVizinho[1];
+                int indexVizinho = -1;
+
+                for (int i = 0; i < numVertices; i++) {
+                    if (grafo.getVertices()[i].equals(cidadeVizinha)) {
+                        indexVizinho = i;
+                        break;
+                    }
+                }
+
+                if (indexVizinho == -1) {
+                    throw new Exception("Cidade vizinha não encontrada no grafo.");
+                }
+
+                if (pesoAresta != null && distancias[indexAtual] != Integer.MAX_VALUE && distancias[indexAtual] + pesoAresta < distancias[indexVizinho]) {
+                    distancias[indexVizinho] = distancias[indexAtual] + pesoAresta;
+                    predecessores[indexVizinho] = indexAtual;
+                }
+            }
+        }
+
+        if (distancias[indexDestino] == Integer.MAX_VALUE) {
+            throw new Exception("Não existe um trajeto possível entre as cidades informadas.");
+        } 
+        List<String> caminhoAteDestino = new ArrayList<>();
+        int atual = indexDestino;
+        while (atual != -1) {
+            caminhoAteDestino.add((String) grafo.getVertices()[atual]);
+            atual = predecessores[atual];
+        }
+        Collections.reverse(caminhoAteDestino); 
+
+        
+        List<Object> resultado = new ArrayList<>();
+        resultado.add(distancias[indexDestino]); 
+        resultado.add(caminhoAteDestino);
+        
+
+        return resultado;      
+    }
+
+
+
+
     private static void imprimirTodasRotas1N(Graph<String, Integer> usGraph, String cidadeInicial, String[] cidades) throws Exception {
             Map<String, Object[]> rotas = main.calcularMelhorRota(usGraph, cidadeInicial, cidades);
             System.out.println("Melhores rotas a partir de " + cidadeInicial + ":");
@@ -205,7 +305,7 @@ public class main {
     }
 
 
-    private static Map<String, Object[]> calcularMelhorRota(Graph grafo ,String cidadeInicial, String[] cidades) throws Exception {
+    private static Map<String, Object[]> calcularMelhorRota(Graph<String, Integer> grafo ,String cidadeInicial, String[] cidades) throws Exception {
         int indexInicial = -1;
 
         for (int i = 0; i < grafo.getVertices().length; i++) {
@@ -254,7 +354,7 @@ public class main {
                 Integer pesoAresta = (Integer) dadosVizinho[1];
                 int indexVizinho = -1;
 
-                for (int i = 0; i < grafo.getVertices().length; i++) {
+                for (int i = 0; i < numVertices; i++) {
                     if (grafo.getVertices()[i].equals(cidadeVizinha)) {
                         indexVizinho = i;
                         break;

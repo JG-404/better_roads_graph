@@ -1,6 +1,8 @@
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -211,7 +213,33 @@ public class Searcher {
         return rotas;      
     }
 
-    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades){
+    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception{
         //TODO
+        throw new NoSuchAlgorithmException();
+    }
+
+    public static String visitarCidadesArray(Graph<String, Integer> grafo, String cidadeInicial, String[] cidadesParaVisitar)throws Exception{
+        int indexInicial = -1;
+
+        for (int i = 0; i < grafo.getVertices().length; i++) {
+            if (grafo.getVertices()[i].equals(cidadeInicial)) {
+                indexInicial = i;
+                break;
+            }
+        }
+
+        if (indexInicial == -1) {
+            throw new Exception("Cidade inicial não encontrada no grafo.");
+        }
+
+        String resp = "";
+        Map<String, Integer> distanciasDaCidadeInicial = new HashMap<>();
+
+        for (String c : cidadesParaVisitar) {
+            distanciasDaCidadeInicial.put(c, (int) calcularMelhorRotaEntreDoisPontos(grafo, cidadeInicial, c).get(0));
+        }
+        
+
+        return resp;
     }
 }

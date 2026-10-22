@@ -1,4 +1,4 @@
-import java.util.*;
+
 
 public class Main {
      public static void main(String[] args) {
@@ -133,6 +133,7 @@ public class Main {
 
             Searcher.imprimirTodasRotas1N(usGraph, cidadeInicial, cidades);
             System.out.println(Searcher.calcularMelhorRotaEntreDoisPontos(usGraph, cidadeInicial, "Orlando"));
+
 
         }catch(Exception e){
             System.err.println("Erro ao inicializar o grafo: " + e.getMessage());

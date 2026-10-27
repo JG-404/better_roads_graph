@@ -47,6 +47,7 @@ public class MatrizEsparsa<X> {
             return this.num;
         }
 
+        @Override 
         public int compareTo(Linha<Y> outro){
             if (this.num > outro.num) return 1;
             if (this.num < outro.num) return -1;
@@ -56,7 +57,6 @@ public class MatrizEsparsa<X> {
     } //FIM DA CLASSE LINHA
 
     private ArvoreBinariaDeBusca<Linha<X>> arvore;
-
     private X valorPadrao;
     private ArrayList<Integer> lins;
 
@@ -65,7 +65,7 @@ public class MatrizEsparsa<X> {
         this.arvore = new ArvoreBinariaDeBusca<>();
     }
 
-    public void setValor(X valor){
+    public void setValor(int lin, int col, X valor) throws Exception{
         //TODO
     }
 

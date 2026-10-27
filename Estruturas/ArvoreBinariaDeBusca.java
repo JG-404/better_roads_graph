@@ -145,6 +145,25 @@ public class ArvoreBinariaDeBusca<X extends Comparable<X>> implements Cloneable
 		}
 		return false;
 	}
+
+    public X getOItem(X i) throws Exception{
+        if (i == null) throw new Exception("Parametro invalido");
+
+        No atual = this.raiz;
+
+        while (atual != null) {
+            int comparacao = i.compareTo(atual.getInfo());
+
+            if (comparacao == 0){
+                if (atual instanceof Cloneable) return this.meuCloneDeX(atual.getInfo());
+                return atual.getInfo();
+            } 
+            if (comparacao < 0) atual = atual.getEsq();
+            else atual = atual.getDir();
+        }
+
+        throw new Exception("Item inexistente");
+    }
 	
 	private int getQtdDeNodos (No r)
 	{

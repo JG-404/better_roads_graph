@@ -1,3 +1,4 @@
+package Estruturas;
 public class Graph<V,A>{
     private V[] vertices;
     private A[][] arestas;

@@ -66,7 +66,42 @@ public class MatrizEsparsa<X> {
     }
 
     public void setValor(int lin, int col, X valor) throws Exception{
-        //TODO
+        if (lin < 0 || col < 0) throw new Exception("Indicies invalidos");
+
+        Linha<X> linhaBuscar = new Linha<>(lin);
+        Linha<X> linha = null;
+        Linha<X>.Coluna<X> colunaBuscar = new Linha<X>(lin).new Coluna<X>(col, null);
+        Linha<X>.Coluna<X> coluna = null;
+
+
+        try{
+            linha = this.arvore.getOItem(linhaBuscar);
+            
+            try{
+                coluna = linha.arvore.getOItem(colunaBuscar);
+            }
+            catch(Exception e){
+                if (valor.equals(this.valorPadrao)) return;
+                coluna = new Linha<X>(lin).new Coluna<X>(col, valor);
+                linha.arvore.guardeUmItem(coluna);
+                return;
+            }
+        }
+        catch(Exception e){
+            if (valor.equals(this.valorPadrao)) return;
+            linha = new Linha<>(lin);
+            coluna = new Linha<X>(lin).new Coluna<X>(col, valor);
+            linha.arvore.guardeUmItem(coluna);
+            this.arvore.guardeUmItem(linha);
+        }
+
+        /*
+        if (valor.equals(this.valorPadrao)){
+            linha.arvore.removaUmItem(coluna);
+            this.arvore.
+        }
+        */
+
     }
 
     public X getValor(int lin, int col) throws Exception{

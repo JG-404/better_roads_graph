@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 import Estruturas.Graph;
 
 public class Main {
@@ -131,8 +133,75 @@ public class Main {
             usGraph.adicioneAresta(38, 40, 23);  // Orlando - Miami
             usGraph.adicioneAresta(39, 40, 3);   // Fort Lauderdale - Miami
 
+            Scanner scanner = new Scanner(System.in);
+            boolean digitou = false;
+            while(!digitou){
+                System.out.println("Escolha um processo para executar:");
+                System.out.println("1 - Ir a uma cidade X");
+                System.out.println("2 - Inserir uma nova cidade");
+                System.out.println("2 - Inserir uma nova estrada");
+                System.out.println("4 - Viajar com limite de Km");
+                System.out.println("5 - Viajar de X ate Y");
+
+                String escolha = scanner.next();
+                switch (escolha) {
+                    case "1":
+                        while(!digitou){
+                            System.out.println("Digite o nome da cidade: ");
+                            String city = scanner.next();
+                            usGraph.adicioneVertice(city);
+
+
+                            System.out.println("Agora crie as estradas conectadas a essa cidade(ao minimo 2)");
+
+                            boolean cidadeExistente = false;
+                            while(!cidadeExistente){
+                                System.out.println("Digite para qual cidade a estrada vai: ");
+                                String cidadeDest = scanner.next();
+                                for(String c : usGraph.getVertices()){
+                                    if(cidadeDest == c){
+                                      cidadeExistente = true;
+                                    }
+                                }
+                            }
+
+                            System.out.println("Digite quantos km tem a cidade: ");
+                            int tamanho = scanner.nextInt();
+                            tamanho = tamanho/10;
+                            usGraph.adicioneAresta(usGraph.getVertices().length, 40, 3);
+
+
+                            digitou = true;  
+                        }
+                    System.out.println(Searcher.calcularMelhorRotaEntreDoisPontos(usGraph, cidadeInicial, "Orlando"));
+                    
+                    break;
+                case "2":
+                    
+                    digitou = true;
+                    break;
+                case "3":
+                    
+                    digitou = true;
+                    break;
+                case "4":
+                    
+                    digitou = true;
+                    break;
+                case "5":
+                    
+                    digitou = true;
+                    break;
+                default:
+                    System.out.println("Escolha inválida, tente novamente.");
+                }
+            }
+                
+
+            String escolha = scanner.next();
+
             Searcher.imprimirTodasRotas1N(usGraph, cidadeInicial, cidades);
-            System.out.println(Searcher.calcularMelhorRotaEntreDoisPontos(usGraph, cidadeInicial, "Orlando"));
+            
 
 
         }catch(Exception e){

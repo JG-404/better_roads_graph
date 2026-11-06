@@ -253,12 +253,11 @@ public class Searcher {
         return rotas;      
     }
 
-    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception{
-        //TODO
-        throw new NoSuchAlgorithmException();
-    }
+    public static List<Object> visitarCidadesArray(
+            Graph<String, Integer> grafo,
+            String cidadeInicial,
+            String[] cidadesParaVisitar) throws Exception {
 
-    public static String visitarCidadesArray(Graph<String, Integer> grafo, String cidadeInicial, String[] cidadesParaVisitar)throws Exception{
         int indexInicial = -1;
 
         for (int i = 0; i < grafo.getVertices().length; i++) {
@@ -272,14 +271,100 @@ public class Searcher {
             throw new Exception("Cidade inicial não encontrada no grafo.");
         }
 
-        String resp = "";
-        Map<String, Integer> distanciasDaCidadeInicial = new HashMap<>();
+        for (String cidade : cidadesParaVisitar) {
+            boolean encontrada = false;
 
-        for (String c : cidadesParaVisitar) {
-            distanciasDaCidadeInicial.put(c, (int) calcularMelhorRotaEntreDoisPontos(grafo, cidadeInicial, c).get(0));
+            for (String vertice : grafo.getVertices()) {
+                if (vertice.equals(cidade)) {
+                    encontrada = true;
+                    break;
+                }
+            }
+
+            if (!encontrada) {
+                throw new Exception("Cidade não encontrada: " + cidade);
+            }
         }
-        
 
-        return resp;
+        StringBuilder resp = new StringBuilder();
+
+        List<String> cidadesPendentes = new ArrayList<>(
+                Arrays.asList(cidadesParaVisitar)
+        );
+
+        // Evita visitar novamente a cidade inicial
+        cidadesPendentes.removeIf(c -> c.equals(cidadeInicial));
+
+        String cidadeAtual = cidadeInicial;
+        int distanciaTotal = 0;
+        int contador = 1;
+
+        resp.append("\n========================================\n");
+        resp.append("          ROTEIRO DE VIAGEM              \n");
+        resp.append("========================================\n\n");
+
+        resp.append("Origem: ").append(cidadeInicial).append("\n\n");
+        resp.append("TRAJETO:\n");
+        resp.append("  ").append(contador).append(". ").append(cidadeAtual);
+
+        while (!cidadesPendentes.isEmpty()) {
+
+            String cidadeMaisProxima = null;
+            int menorDistancia = Integer.MAX_VALUE;
+
+            // Procura a cidade pendente mais próxima da cidade atual
+            for (String cidade : cidadesPendentes) {
+
+                List<Object> resultado = calcularMelhorRotaEntreDoisPontos(
+                        grafo, cidadeAtual, cidade
+                );
+
+                int distancia = (int) resultado.get(0);
+
+                if (distancia < menorDistancia) {
+                    menorDistancia = distancia;
+                    cidadeMaisProxima = cidade;
+                }
+            }
+
+            if (cidadeMaisProxima == null) {
+                throw new Exception("Não foi possível encontrar uma próxima cidade.");
+            }
+
+            distanciaTotal += menorDistancia;
+
+            contador++;
+
+            resp.append("\n       |\n       v\n");
+            resp.append("  ").append(contador).append(". ")
+                .append(cidadeMaisProxima);
+
+            cidadesPendentes.remove(cidadeMaisProxima);
+
+            cidadeAtual = cidadeMaisProxima;
+        }
+
+        resp.append("\n\n----------------------------------------\n");
+        resp.append("Distância total: ").append(distanciaTotal).append(" km\n");
+        resp.append("Cidades visitadas: ").append(contador).append("\n");
+        resp.append("Estradas entre visitas: ").append(contador - 1).append("\n");
+        resp.append("========================================\n");
+
+        List<Object> resultado = new ArrayList<>();
+        resultado.add(distanciaTotal); 
+        resultado.add(resp.toString());
+
+        return resultado;
+    }
+
+
+
+    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception{
+        //TODO
+        throw new NoSuchAlgorithmException();
+    }
+
+    public static List<Object> viajarComLimiteDeDistancia(Graph<String, Integer> grafo, String cidadeInicial, int limiteDistancia) throws Exception {
+        throw new NoSuchAlgorithmException();
     }
 }

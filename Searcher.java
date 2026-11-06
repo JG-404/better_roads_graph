@@ -101,6 +101,44 @@ public class Searcher {
         List<Object> resultado = new ArrayList<>();
         resultado.add(distancias[indexDestino]); 
         resultado.add(caminhoAteDestino);
+
+        StringBuilder apresentacao = new StringBuilder();
+
+        apresentacao.append("\n");
+        apresentacao.append("========================================\n");
+        apresentacao.append("             MELHOR ROTA                \n");
+        apresentacao.append("========================================\n\n");
+
+        apresentacao.append("  Origem: ").append(cidadeInicial).append("\n");
+        apresentacao.append("  Destino: ").append(cidadeDestino).append("\n\n");
+
+        apresentacao.append("  Trajeto:\n");
+
+        for (int i = 0; i < caminhoAteDestino.size(); i++) {
+            apresentacao.append("  ")
+                        .append(i + 1)
+                        .append(". ")
+                        .append(caminhoAteDestino.get(i));
+
+            if (i < caminhoAteDestino.size() - 1) {
+                apresentacao.append("\n       |\n       v\n");
+            }
+        }
+
+        apresentacao.append("\n\n----------------------------------------\n");
+        apresentacao.append("  Distancia total: ")
+                    .append(distancias[indexDestino])
+                    .append(" km\n");
+        apresentacao.append("  Cidades percorridas: ")
+                    .append(caminhoAteDestino.size())
+                    .append("\n");
+        apresentacao.append("  Estradas utilizadas: ")
+                    .append(caminhoAteDestino.size() - 1)
+                    .append("\n");
+        apresentacao.append("========================================\n");
+
+        resultado.add(apresentacao.toString());
+
         
 
         return resultado;      

@@ -11,24 +11,21 @@ public class Graph<V,A>{
         this.arestas = (A[][]) new Object[vet.length][vet.length];
     }
 
-    private void redimensionar(int size){
-        V[] novoVet = (V[]) new Object[this.vertices.length + size];
+    private void redimensionar(int size) {
+        int tamanhoAntigo = this.vertices.length;
+        int tamanhoNovo = tamanhoAntigo + size;
 
-        for (int i = 0, j = 0; i < this.vertices.length; i++, j=this.vertices[i]==null?j+0:j+1){
-            if (this.vertices[i] == null) continue;
-            novoVet[j] = this.vertices[i];
-        }
+        V[] novoVet = java.util.Arrays.copyOf(this.vertices, tamanhoNovo);
 
-        this.vertices = novoVet;
+        A[][] novoAre = (A[][]) new Object[tamanhoNovo][tamanhoNovo];
 
-        A[][] novoAre = (A[][]) new Object[this.vertices.length][this.vertices.length];
-
-        for (int i = 0; i < this.arestas.length; i++){
-            for (int j = 0; j < this.arestas[i].length; j++){
+        for (int i = 0; i < this.arestas.length; i++) {
+            for (int j = 0; j < this.arestas[i].length; j++) {
                 novoAre[i][j] = this.arestas[i][j];
             }
         }
 
+        this.vertices = novoVet;
         this.arestas = novoAre;
     }
 

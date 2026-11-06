@@ -146,7 +146,7 @@ public class ArvoreBinariaDeBusca<X extends Comparable<X>> implements Cloneable
 		return false;
 	}
 
-    public X getOItem(X i) throws Exception{
+    public X getACopiaDoItem(X i) throws Exception{
         if (i == null) throw new Exception("Parametro invalido");
 
         No atual = this.raiz;
@@ -156,6 +156,24 @@ public class ArvoreBinariaDeBusca<X extends Comparable<X>> implements Cloneable
 
             if (comparacao == 0){
                 if (atual instanceof Cloneable) return this.meuCloneDeX(atual.getInfo());
+                throw new Exception("Item não pode ser clonado");
+            } 
+            if (comparacao < 0) atual = atual.getEsq();
+            else atual = atual.getDir();
+        }
+
+        throw new Exception("Item inexistente");
+    }
+
+    public X getOItem(X i) throws Exception{
+        if (i == null) throw new Exception("Parametro invalido");
+
+        No atual = this.raiz;
+
+        while (atual != null) {
+            int comparacao = i.compareTo(atual.getInfo());
+
+            if (comparacao == 0){
                 return atual.getInfo();
             } 
             if (comparacao < 0) atual = atual.getEsq();

@@ -525,6 +525,4 @@ public class ArvoreBinariaDeBusca<X extends Comparable<X>> implements Cloneable
         copiador(modelo.getEsq());
         copiador(modelo.getDir());
     }
-
-	// faça os demais métodos obrigatórios incluindo os "implements" apropriados
-} // fim da classe ArvoreBinariaDeBusca
+}

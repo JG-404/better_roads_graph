@@ -365,6 +365,116 @@ public class Searcher {
     }
 
     public static List<Object> viajarComLimiteDeDistancia(Graph<String, Integer> grafo, String cidadeInicial, int limiteDistancia) throws Exception {
-        throw new NoSuchAlgorithmException();
+        int indexInicial = -1;
+        limiteDistancia = limiteDistancia / 10;
+
+        for (int i = 0; i < grafo.getVertices().length; i++) {
+            if (grafo.getVertices()[i].equals(cidadeInicial)) {
+                indexInicial = i;
+                break;
+            }
+        }
+
+        if (indexInicial == -1) {
+            throw new Exception("Cidade inicial não encontrada no grafo.");
+        }
+
+        
+        List<String> cidades = new ArrayList<>();
+        boolean[] visitados = new boolean[grafo.getVertices().length];
+        int distanciaTotal = 0;
+        String cidadeAtualNome = (String) grafo.getVertices()[indexInicial];
+
+        cidades.add(cidadeAtualNome);
+        visitados[indexInicial] = true;
+
+        while(distanciaTotal < limiteDistancia){
+            String cidadeMaisProxima = null;
+            int indexMaisProximo = -1;
+            int menorDistancia = Integer.MAX_VALUE;
+
+            for (Object c : grafo.obterVizinhos(cidadeAtualNome)) {
+                Object[] dadosVizinho = (Object[]) c;
+                if (dadosVizinho == null) continue;
+
+                String cidadeVizinha = (String) dadosVizinho[0];
+                Integer pesoAresta = (Integer) dadosVizinho[1];
+                if (pesoAresta == null) continue;
+
+                int indexVizinho = -1;
+                for (int i = 0; i < grafo.getVertices().length; i++) {
+                    if (cidadeVizinha.equals(grafo.getVertices()[i])) {
+                        indexVizinho = i;
+                        break;
+                    }
+                }
+
+                if (indexVizinho != -1 && !visitados[indexVizinho]) {
+                    if (distanciaTotal + pesoAresta <= limiteDistancia/2 && pesoAresta < menorDistancia) {
+                        menorDistancia = pesoAresta;
+                        cidadeMaisProxima = cidadeVizinha;
+                        indexMaisProximo = indexVizinho;
+                    }
+                }
+            }
+
+            if(cidadeMaisProxima == null){
+                break; 
+            }
+
+            visitados[indexMaisProximo] = true;
+            cidades.add(cidadeMaisProxima);
+            cidadeAtualNome = cidadeMaisProxima;
+            distanciaTotal += menorDistancia;
+
+        }
+
+        distanciaTotal *= 10;  
+        limiteDistancia *= 10; 
+
+        StringBuilder apresentacao = new StringBuilder();
+
+        apresentacao.append("\n");
+        apresentacao.append("========================================\n");
+        apresentacao.append("             MELHOR ROTA                \n");
+        apresentacao.append("========================================\n\n");
+
+        apresentacao.append("  Origem: ").append(cidadeInicial).append("\n");
+        apresentacao.append("  Limite de Distância: ").append(limiteDistancia).append(" km\n");
+
+        apresentacao.append("  Trajeto(caminho de ida e volta):\n");
+
+        for (int i = 0; i < cidades.size(); i++) {
+            apresentacao.append("  ")
+                        .append(i + 1)
+                        .append(". ")
+                        .append(cidades.get(i));
+
+            if (i < cidades.size() - 1) {
+                
+                apresentacao.append("\n       - ^\n       | |\n       v -\n");
+            }
+        }
+
+        apresentacao.append("\n\n----------------------------------------\n");
+        apresentacao.append("  Distancia de mão unica: ")
+                    .append(distanciaTotal)
+                    .append(" km\n");
+        apresentacao.append("  Distancia Total: ")
+                    .append(distanciaTotal*2)
+                    .append(" km\n");
+        apresentacao.append("  Cidades percorridas: ")
+                    .append(cidades.size())
+                    .append("\n");
+        apresentacao.append("  Estradas utilizadas: ")
+                    .append((cidades.size() - 1)*2)
+                    .append("\n");
+        apresentacao.append("========================================\n");
+
+        List<Object> res = new ArrayList<>();
+        res.add(distanciaTotal);
+        res.add(cidades);
+        res.add(apresentacao.toString());
+        return res;
     }
 }

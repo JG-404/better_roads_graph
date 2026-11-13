@@ -235,12 +235,11 @@ public class Main {
                                 scanner.nextLine();
                             }
                         }
-                        /*
-                        System.out.println(Searcher.calcularMelhorRotaComLimite(
+                    
+                        System.out.println(Searcher.viajarComLimiteDeDistancia(
                             usGraph, cidadeInicial, distancia
-                        ));
+                        ).get(2));
                         break;
-                        */
                     }
 
                     case "5": {

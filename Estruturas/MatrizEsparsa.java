@@ -1,4 +1,5 @@
 package Estruturas;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -129,6 +130,16 @@ public class MatrizEsparsa<X> implements Cloneable{
     private ArvoreBinariaDeBusca<Linha<X>> arvore;
     private X valorPadrao;
     private ArrayList<Integer> lins;
+
+    public ArrayList<Integer> getLins() {
+        return new ArrayList<Integer>(this.lins);
+    }
+
+    public ArrayList<Integer> getCols(int lin) throws Exception {
+        Linha<X> linha = this.arvore.getOItem(new Linha<>(lin));
+        return new ArrayList<>(linha.cols);
+    }
+
 
     public MatrizEsparsa(X valorPadrao){
         this.valorPadrao = valorPadrao;

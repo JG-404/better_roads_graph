@@ -359,9 +359,99 @@ public class Searcher {
 
 
 
-    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception{
-        //TODO
-        throw new NoSuchAlgorithmException();
+    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception {
+
+        if (grafo == null || cidadeInicial == null || cidades == null)
+            throw new Exception("Parametros inválidos.");
+
+        List<String> cidadesPendentes = new ArrayList<>();
+
+        for (String cidade : cidades) {
+            if (cidade == null)
+                throw new Exception("Cidade nula.");
+
+            if (!cidade.equals(cidadeInicial) && !cidadesPendentes.contains(cidade))
+                cidadesPendentes.add(cidade);
+        }
+
+        Map<String, Object[]> resultado = new LinkedHashMap<>();
+
+        String cidadeAtual = cidadeInicial;
+        double distanciaTotal = 0;
+
+        String percurso = "PERCURSO COMPLETO:\n";
+
+        int trecho = 1;
+
+        while (!cidadesPendentes.isEmpty()) {
+
+            String proximaCidade = null;
+            double menorDistancia = Double.MAX_VALUE;
+            List<Object> melhorRota = null;
+
+            for (String cidade : cidadesPendentes) {
+
+                List<Object> rota = calcularMelhorRotaEntreDoisPontos(
+                        grafo, cidadeAtual, cidade);
+
+                double distancia = ((Number) rota.get(0)).doubleValue();
+
+                if (distancia < menorDistancia) {
+                    menorDistancia = distancia;
+                    proximaCidade = cidade;
+                    melhorRota = rota;
+                }
+            }
+
+            if (proximaCidade == null || melhorRota == null)
+                throw new Exception("Não foi possível encontrar uma rota.");
+
+            List<String> caminho = (List<String>) melhorRota.get(1);
+
+            String descricao = String.join(" -> ", caminho);
+
+            percurso += "\nTrecho " + trecho + ":\n";
+            percurso += descricao;
+            percurso += "\nDistância: " + menorDistancia + "\n";
+
+            resultado.put("Trecho " + trecho,
+                    new Object[]{descricao, menorDistancia, caminho});
+
+            distanciaTotal += menorDistancia;
+
+            cidadeAtual = proximaCidade;
+            cidadesPendentes.remove(proximaCidade);
+
+            trecho++;
+        }
+
+        // Retorno à cidade inicial
+        List<Object> rotaRetorno = calcularMelhorRotaEntreDoisPontos(
+                grafo, cidadeAtual, cidadeInicial);
+
+        double distanciaRetorno =
+                ((Number) rotaRetorno.get(0)).doubleValue();
+
+        List<String> caminhoRetorno = (List<String>) rotaRetorno.get(1);
+
+        String descricaoRetorno = String.join(" -> ", caminhoRetorno);
+
+        percurso += "\nTrecho " + trecho + " (RETORNO):\n";
+        percurso += descricaoRetorno;
+        percurso += "\nDistância: " + distanciaRetorno + "\n";
+
+        resultado.put("Trecho " + trecho,
+                new Object[]{descricaoRetorno, distanciaRetorno, caminhoRetorno});
+
+        distanciaTotal += distanciaRetorno;
+
+        percurso += "\n================================\n";
+        percurso += "DISTÂNCIA TOTAL: " + distanciaTotal;
+
+        resultado.put("Resultado",
+                new Object[]{percurso, distanciaTotal});
+
+        return resultado;
     }
 
     public static List<Object> viajarComLimiteDeDistancia(Graph<String, Integer> grafo, String cidadeInicial, int limiteDistancia) throws Exception {

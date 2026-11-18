@@ -85,7 +85,7 @@ public class GrafoLista<V,A> implements Cloneable{
     public void adicioneVertice(V i) throws Exception {
         if (i == null) throw new Exception("Vertice vazio");
 
-        V[] novoVet = (V[]) new Object[this.vertices.length + 1];
+        V[] novoVet = java.util.Arrays.copyOf(this.vertices, this.vertices.length + 1);
         
         for (int j = 0; j < this.vertices.length; j++)
             novoVet[j] = this.vertices[j];
@@ -126,7 +126,7 @@ public class GrafoLista<V,A> implements Cloneable{
             }
         }
 
-        V[] novosVertices = (V[]) new Object[this.vertices.length - 1];
+        V[] novosVertices = java.util.Arrays.copyOf(this.vertices, this.vertices.length - 1);
 
         for (int i = 0, j = 0; i < this.vertices.length; i++) {
             if (i != indice)novosVertices[j++] = this.vertices[i];
@@ -150,7 +150,7 @@ public class GrafoLista<V,A> implements Cloneable{
         }
 
         this.arestas.get(i).add(new Aresta(j, aresta));
-        this.arestas.get(j).add(new Aresta(i, aresta));
+        if (i != j) this.arestas.get(j).add(new Aresta(i, aresta));
     }
 
     public void removerAresta(int i, int j) throws Exception {
@@ -290,28 +290,45 @@ public class GrafoLista<V,A> implements Cloneable{
 
     @Override
     public int hashCode() {
-        int ret = 7;
+        int ret = 1;
+        int hashVertices = 0;
+        int hashArestas = 0;
 
         for (V vertice : this.vertices) {
-            if (vertice != null) ret = 3 * ret + vertice.hashCode();
+            if (vertice != null)
+                hashVertices += vertice.hashCode();
         }
 
         for (int i = 0; i < this.arestas.size(); i++) {
             for (Aresta aresta : this.arestas.get(i)) {
-                if (i <= aresta.getDestino()) {
-                    ret = 3 * ret + aresta.getValor().hashCode();
+
+                int destino = aresta.getDestino();
+
+                if (i <= destino) {
+                    int hashOrigem = this.vertices[i].hashCode();
+                    int hashDestino = this.vertices[destino].hashCode();
+
+                    int hashExtremos = hashOrigem ^ hashDestino;
+
+                    int hashAresta =
+                        31 * hashExtremos + aresta.getValor().hashCode();
+
+                    hashArestas += hashAresta;
                 }
             }
         }
+        ret = ret * 3 + hashVertices;
+        ret = ret * 3 + hashArestas;
 
         if (ret < 0) ret = -ret;
         return ret;
     }
 
+
     public GrafoLista(GrafoLista<V, A> modelo) throws Exception {
         if (modelo == null)throw new Exception("Modelo vazio");
 
-        this.vertices = (V[]) new Object[modelo.vertices.length];
+        this.vertices = java.util.Arrays.copyOf(modelo.vertices, modelo.vertices.length);
 
         for (int i = 0; i < modelo.vertices.length; i++) {
             if (modelo.vertices[i] == null)continue;

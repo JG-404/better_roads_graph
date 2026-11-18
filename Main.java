@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Scanner;
 import Estruturas.Graph;
 
@@ -134,7 +135,8 @@ public class Main {
                 System.out.println("3 - Ir da cidade inicial até uma cidade X");
                 System.out.println("4 - Viajar com limite de Km");
                 System.out.println("5 - Viajar de X até Y");
-                System.out.println("6 - Sair do programa");
+                System.out.println("6 - Rodar mapa inteiro");
+                System.out.println("7 - Sair do programa");
                 System.out.print("Opção: ");
 
                 String escolha = scanner.nextLine().trim();
@@ -267,6 +269,21 @@ public class Main {
                     }
 
                     case "6":
+                        Map<String, Object[]> resultado = Searcher.rodarMapaInteiro(usGraph, cidadeInicial, cidades);
+                        for (Map.Entry<String, Object[]> entrada : resultado.entrySet()) {
+
+                            System.out.println(entrada.getKey());
+
+                            Object[] dados = entrada.getValue();
+
+                            System.out.println("Percurso: " + dados[0]);
+                            System.out.println("Distância: " + dados[1]);
+
+                            System.out.println("----------------------");
+                        }                       
+                        break;
+
+                    case "7":
                         System.out.println("Encerrando o programa...");
                         executou = false;
                         break;

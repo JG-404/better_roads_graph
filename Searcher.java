@@ -424,8 +424,7 @@ public class Searcher {
 
             trecho++;
         }
-
-        // Retorno à cidade inicial
+        
         List<Object> rotaRetorno = calcularMelhorRotaEntreDoisPontos(
                 grafo, cidadeAtual, cidadeInicial);
 

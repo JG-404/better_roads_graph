@@ -270,17 +270,8 @@ public class Main {
 
                     case "6":
                         Map<String, Object[]> resultado = Searcher.rodarMapaInteiro(usGraph, cidadeInicial, cidades);
-                        for (Map.Entry<String, Object[]> entrada : resultado.entrySet()) {
-
-                            System.out.println(entrada.getKey());
-
-                            Object[] dados = entrada.getValue();
-
-                            System.out.println("Percurso: " + dados[0]);
-                            System.out.println("Distância: " + dados[1]);
-
-                            System.out.println("----------------------");
-                        }                       
+                        System.out.println(resultado.get("Resultado")[0]);
+                        System.out.println(resultado.get("Resultado")[1]);                    
                         break;
 
                     case "7":

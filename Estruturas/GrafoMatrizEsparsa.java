@@ -2,6 +2,7 @@ package Estruturas;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class GrafoMatrizEsparsa<V,A> implements Cloneable{
     private V[] vertices;
@@ -40,7 +41,8 @@ public class GrafoMatrizEsparsa<V,A> implements Cloneable{
     private void redimensionar(int size) {
         int tamanhoNovo = this.vertices.length + size;
 
-        V[] novoVet = (V[]) new Object[tamanhoNovo];
+        V[] novoVet = Arrays.copyOf(this.vertices, tamanhoNovo);
+        Arrays.fill(novoVet, null);
 
         MatrizEsparsa<A> novoAre = new MatrizEsparsa<A>((A) null);
 
@@ -96,15 +98,28 @@ public class GrafoMatrizEsparsa<V,A> implements Cloneable{
         this.vertices[this.vertices.length-1] = i;
     }
 
-    public void removerVertice(V i) throws Exception{
-        if (i == null) throw new Exception("Vertice vazio");
 
-        for (int j = 0; j < this.vertices.length; j++){
-            if (this.vertices[j].equals(i)) this.vertices[j] = null;
+    public void removerVertice(V i) throws Exception {
+        if (i == null)
+            throw new Exception("Vertice vazio");
+
+        int posicao = -1;
+
+        for (int j = 0; j < this.vertices.length; j++) {
+            if (this.vertices[j] != null && this.vertices[j].equals(i)) {
+                posicao = j;
+                break;
+            }
         }
+
+        if (posicao == -1)
+            throw new Exception("Vertice não encontrado");
+
+        this.vertices[posicao] = null;
 
         redimensionar(-1);
     }
+
 
     public MatrizEsparsa<A> getArestas() {
         return (MatrizEsparsa<A>)this.arestas.clone();
@@ -320,7 +335,7 @@ public class GrafoMatrizEsparsa<V,A> implements Cloneable{
     public GrafoMatrizEsparsa(GrafoMatrizEsparsa<V, A> modelo) throws Exception{
         if (modelo == null) throw new Exception("Modelo vazio");
 
-        this.vertices = (V[]) new Object[modelo.vertices.length];
+        this.vertices = modelo.vertices.clone();
         this.arestas = new MatrizEsparsa<A>((A) null);
 
         

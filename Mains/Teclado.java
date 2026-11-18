@@ -1,3 +1,4 @@
+package Mains;
 import java.util.Scanner;
 
 public class Teclado {
@@ -45,7 +46,7 @@ public class Teclado {
 
             }
         }
-
+        scanner.close();
         return cidadeInicial;
     }
 }

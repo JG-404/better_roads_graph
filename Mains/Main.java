@@ -1,3 +1,4 @@
+package Mains;
 import java.util.Map;
 import java.util.Scanner;
 import Estruturas.Graph;

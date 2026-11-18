@@ -1,17 +1,17 @@
-import java.security.NoSuchAlgorithmException;
+package Mains;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import Estruturas.Graph;
+import Estruturas.GrafoMatrizEsparsa;
 
-public class Searcher {
+public class SearcherMatrizEsparsa {
 
-    public static List<Object> calcularMelhorRotaEntreDoisPontos(Graph<String, Integer> grafo, String cidadeInicial, String cidadeDestino) throws Exception {
+    public static List<Object> calcularMelhorRotaEntreDoisPontos(GrafoMatrizEsparsa<String, Integer> grafo, String cidadeInicial, String cidadeDestino) throws Exception {
         int indexInicial = -1;
         int indexDestino = -1;
         int numVertices = grafo.getVertices().length;
@@ -147,7 +147,7 @@ public class Searcher {
 
 
 
-    public static void imprimirTodasRotas1N(Graph<String, Integer> usGraph, String cidadeInicial, String[] cidades) throws Exception {
+    public static void imprimirTodasRotas1N(GrafoMatrizEsparsa<String, Integer> usGraph, String cidadeInicial, String[] cidades) throws Exception {
             Map<String, Object[]> rotas = calcularMelhorRota(usGraph, cidadeInicial, cidades);
             System.out.println("Melhores rotas a partir de " + cidadeInicial + ":");
             System.out.println("-------------------------------------------------------");
@@ -170,7 +170,7 @@ public class Searcher {
     }
 
 
-    public static Map<String, Object[]> calcularMelhorRota(Graph<String, Integer> grafo ,String cidadeInicial, String[] cidades) throws Exception {
+    public static Map<String, Object[]> calcularMelhorRota(GrafoMatrizEsparsa<String, Integer> grafo ,String cidadeInicial, String[] cidades) throws Exception {
         int indexInicial = -1;
 
         for (int i = 0; i < grafo.getVertices().length; i++) {
@@ -254,7 +254,7 @@ public class Searcher {
     }
 
     public static List<Object> visitarCidadesArray(
-            Graph<String, Integer> grafo,
+            GrafoMatrizEsparsa<String, Integer> grafo,
             String cidadeInicial,
             String[] cidadesParaVisitar) throws Exception {
 
@@ -359,7 +359,7 @@ public class Searcher {
 
 
 
-    public static Map<String, Object[]> rodarMapaInteiro(Graph<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception {
+    public static Map<String, Object[]> rodarMapaInteiro(GrafoMatrizEsparsa<String, Integer> grafo, String cidadeInicial, String[] cidades) throws Exception {
 
         if (grafo == null || cidadeInicial == null || cidades == null)
             throw new Exception("Parametros inválidos.");
@@ -453,7 +453,7 @@ public class Searcher {
         return resultado;
     }
 
-    public static List<Object> viajarComLimiteDeDistancia(Graph<String, Integer> grafo, String cidadeInicial, int limiteDistancia) throws Exception {
+    public static List<Object> viajarComLimiteDeDistancia(GrafoMatrizEsparsa<String, Integer> grafo, String cidadeInicial, int limiteDistancia) throws Exception {
         int indexInicial = -1;
         limiteDistancia = limiteDistancia / 10;
 
@@ -567,3 +567,4 @@ public class Searcher {
         return res;
     }
 }
+

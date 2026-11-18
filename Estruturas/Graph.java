@@ -75,7 +75,7 @@ public class Graph<V,A> implements Cloneable{
         this.arestas = novoAre;
     }
 
-    public V[] getVertices() {
+    public Object[] getVertices() {
         return vertices;
     }
 

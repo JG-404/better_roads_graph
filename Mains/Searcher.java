@@ -273,7 +273,7 @@ public class Searcher {
         for (String cidade : cidadesParaVisitar) {
             boolean encontrada = false;
 
-            for (String vertice : grafo.getVertices()) {
+            for (Object vertice : grafo.getVertices()) {
                 if (vertice.equals(cidade)) {
                     encontrada = true;
                     break;

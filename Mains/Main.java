@@ -6,9 +6,9 @@ import Estruturas.Graph;
 public class Main {
 
     public static int buscarCidade(Graph<String, Integer> grafo, String nome) {
-        String[] vertices = grafo.getVertices();
+        Object[] vertices = grafo.getVertices();
         for (int i = 0; i < vertices.length; i++) {
-            if (vertices[i].equalsIgnoreCase(nome.trim())) return i;
+            if (vertices[i].toString().equalsIgnoreCase(nome.trim())) return i;
         }
         return -1;
     }
@@ -28,7 +28,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String cidadeInicial = Teclado.cidadeInicial();
+        Scanner scanner = new Scanner(System.in);
+
+        String cidadeInicial = Teclado.cidadeInicial(scanner);
         System.out.println("Iniciando cálculo de rotas a partir de " + cidadeInicial + "...");
 
         String[] cidades = {
@@ -126,7 +128,7 @@ public class Main {
             usGraph.adicioneAresta(38, 40, 23);
             usGraph.adicioneAresta(39, 40, 3);
 
-            Scanner scanner = new Scanner(System.in);
+            
             boolean executou = true;
 
             while (executou) {
@@ -281,11 +283,11 @@ public class Main {
                         break;
 
                     default:
-                        System.out.println("Opção inválida. Escolha de 1 a 5.");
+                        System.out.println("Opção inválida. Escolha de 1 a 7.");
                     
                     }
                     System.out.println("-------------------------------------------------------");
-                    System.out.println("Se deseja continuar, escolha outra opção. Caso contrário, digite 6 para sair."); 
+                    System.out.println("Se deseja continuar, escolha outra opção. Caso contrário, digite 7 para sair."); 
             }
 
             scanner.close();

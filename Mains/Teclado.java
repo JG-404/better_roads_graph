@@ -2,8 +2,7 @@ package Mains;
 import java.util.Scanner;
 
 public class Teclado {
-    public static String cidadeInicial(){
-        Scanner scanner = new Scanner(System.in);
+    public static String cidadeInicial(Scanner scanner){
         boolean digitou = false;
         String cidadeInicial = "";
         while(!digitou){
@@ -16,6 +15,7 @@ public class Teclado {
             System.out.println("6 - Atlanta");
 
             String escolha = scanner.next();
+            scanner.nextLine();
             switch (escolha) {
                 case "1":
                     cidadeInicial = "Miami";
@@ -46,7 +46,6 @@ public class Teclado {
 
             }
         }
-        scanner.close();
         return cidadeInicial;
     }
 }
